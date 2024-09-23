@@ -1,0 +1,54 @@
+<mat-horizontal-stepper>
+  <mat-step [formGroup]="firstFormGroup">
+    <ng-template matStepLabel >Step 1: Personal Information</ng-template>
+    <div class="spacing-container">
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Name" formControlName="name" required>
+      <mat-error *ngIf="firstFormGroup.get('name')?.hasError('required')">Name is required</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput placeholder="Email" formControlName="email" required>
+      <mat-error *ngIf="firstFormGroup.get('email')?.hasError('required')">Email is required</mat-error>
+      <mat-error *ngIf="firstFormGroup.get('email')?.hasError('email')">Not a valid email</mat-error>
+    </mat-form-field>
+    </div>
+    <div>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step [formGroup]="secondFormGroup">
+    <ng-template matStepLabel>Step 2: Courses</ng-template>
+    <div formArrayName="courses">
+      <div *ngFor="let course of courses.controls; let i = index" [formGroupName]="i" class="spacing-container">
+        <mat-form-field>
+          <mat-label>Course Title</mat-label>
+          <input matInput formControlName="Title" placeholder="Enter course title" required>
+          <mat-error *ngIf="course.get('Title')?.hasError('required')">Course title is required</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Credit Hours</mat-label>
+          <input matInput formControlName="creditHours" placeholder="Enter credit hours" required>
+          <mat-error *ngIf="course.get('creditHours')?.hasError('required')">Credit hours are required</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <button mat-button (click)="addAddress()">Add Course</button>
+    <div class="spacing-container">
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Step 3: Review</ng-template>
+    <p>First Step Data: {{ firstFormGroup.value | json }}</p>
+    <p>Second Step Data: {{ secondFormGroup.value | json }}</p>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="onSubmit()">Submit</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
